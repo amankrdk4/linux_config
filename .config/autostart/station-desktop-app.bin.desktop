@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=station-desktop-app.bin
+Comment=station-desktop-app.binstartup script
+Exec=/opt/Station/station-desktop-app.bin
+StartupNotify=false
+Terminal=false
