@@ -233,3 +233,4 @@ bindsym XF86MonBrightnessUp exec light -A 5
 bindsym XF86MonBrightnessDown exec light -U 5
 bindsym $mod+z exec bluetoothctl connect 85:5A:D2:1B:79:1D
 
+
