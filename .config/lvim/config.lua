@@ -78,5 +78,10 @@ vim.opt.smartindent = true
 
 -- Disable automatic comment continuation
 vim.cmd [[autocmd FileType * setlocal formatoptions-=cro]]
+-- clipboard settings 
+vim.opt.clipboard = ""
+vim.keymap.set("n", "<F1>", ":%y+<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<M-p>", ":%delete _ | put +<CR>", { noremap = true, silent = true })
+
 
 
