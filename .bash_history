@@ -550,3 +550,58 @@ gcc p4.c && ./a.out
 ps -elf | grep z
 gcc p5.c && ./a.out
 ps -l
+git clone https://github.com/amankrdk4/linux_config
+ls
+sudo nala install stow -y
+rm -r .* -r
+ls
+cd linux_config/
+stow .
+cd
+ls -larth
+cd .config
+ls
+exit
+sudo nala install zsh -y
+ls
+lsblk
+sudo mount /dev/sdb1 /mnt
+cd /mnt
+ls
+ls -larth
+cp backup_202601.tar ~/
+cd
+ls
+cd
+ls
+tar -tvf backup_202601.tar 
+mkdir test
+mv backup_202601.tar test/
+ls
+cd test
+ls
+tar -xvf backup_202601.tar 
+ls
+cd home
+ls
+cd alpha
+ls
+ls -la
+cd .config
+ls
+cd i3
+chsh -s /bin/zsh
+zsh
+sudo nala install zsh -y
+chsh -s /bin/zsh
+zsh
+nmcli dev wifi list
+nmtui
+nmcli radio wifi on
+nmcli dev wifi list
+xinput list --name-only | grep -i "touchpad"
+sudo apt install xinput -y
+xinput list --name-only | grep -i "touchpad"
+vi ~/.config/i3/config
+systemctl restart gdm3
+systemctl restart lightdm 

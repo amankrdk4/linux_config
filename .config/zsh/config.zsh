@@ -40,6 +40,4 @@ source ~/.config/powerlevel10k/powerlevel10k.zsh-theme
 source ~/.config/zsh/scripts/date_rename.zsh
 
 export PATH=/home/alpha/.local/bin:$PATH
-if command -v lvim >/dev/null 2>&1; then
-  alias vi='lvim'
-fi
+export PATH=/home/alpha/.appimg:$PATH
