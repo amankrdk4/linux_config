@@ -38,6 +38,12 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 source <(fzf --zsh)
 source ~/.config/powerlevel10k/powerlevel10k.zsh-theme
 source ~/.config/zsh/scripts/date_rename.zsh
+# Source all scripts in ~/.config/zsh/script
+if [ -d "$HOME/.config/zsh/scripts" ]; then
+  for script in "$HOME/.config/zsh/scripts"/*.sh; do
+    source "$script"
+  done
+fi
 
 export PATH=/home/alpha/.local/bin:$PATH
 export PATH=/home/alpha/.appimg:$PATH
