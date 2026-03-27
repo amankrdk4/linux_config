@@ -11,6 +11,7 @@ floating_modifier $mod
 font pango:JetBrainsMono Nerd Font 14
 
 # --- Autostart Core Services ---
+exec --no-startup-id dunst
 exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id nm-applet
 exec --no-startup-id xss-lock -- ~/.config/i3/hibernate.sh
@@ -79,6 +80,8 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 # ==========================================================
 # NAVIGATION & WINDOWS
 # ==========================================================
+# clipman daemon
+exec_always --no-startup-id cliphist watch
 
 # Core Actions
 bindsym $mod+Return exec alacritty

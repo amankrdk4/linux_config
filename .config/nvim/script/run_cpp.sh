@@ -10,19 +10,21 @@ STATS=$7
 cd "$DIR" || exit
 
 # 1. Precompile bits/stdc++.h if the GCH doesn't exist
-# This is usually located at /usr/include/c++/v1/ (clang) or /usr/include/x86_64-linux-gnu/c++/(gcc)
-# For Debian, we'll target the standard GCC path.
-GCH_HEADER="/usr/include/x86_64-linux-gnu/c++/12/bits/stdc++.h" # Adjust version if needed
+# Using a more generic path for Debian 12
+GCH_HEADER="/usr/include/c++/12/bits/stdc++.h" 
 if [ ! -f "bits/stdc++.h.gch" ]; then
     mkdir -p bits
-    # Copying or symlinking the header to a local 'bits' folder for local gch generation
-    cp /usr/include/x86_64-linux-gnu/c++/12/bits/stdc++.h ./bits/ 2>/dev/null
-    g++ -std=c++17 ./bits/stdc++.h -o ./bits/stdc++.h.gch 2>/dev/null
+    if [ -f "$GCH_HEADER" ]; then
+        cp "$GCH_HEADER" ./bits/
+        # Include -DLOCAL here as well if you use it in headers, 
+        # but usually just standard flags are enough for GCH
+        g++ -std=c++17 -O2 ./bits/stdc++.h -o ./bits/stdc++.h.gch 2>/dev/null
+    fi
 fi
 
-# 2. Compile (The Lua config decides if this needs to run)
-# Added -O2 for realistic CP performance
-g++ -std=c++17 -O2 "$FILE_FULL" -o "$FILE_NO_EXT" 2> "$ERR"
+# 2. Compile with the -DLOCAL flag
+# This triggers your template's "Standard I/O" logic
+g++ -std=c++17 -O2 -DLOCAL "$FILE_FULL" -o "$FILE_NO_EXT" 2> "$ERR"
 
 if [ $? -eq 0 ]; then
     # 3. Run with the specific 6.9s timeout
@@ -34,4 +36,5 @@ if [ $? -eq 0 ]; then
     fi
 else
     echo "COMPILATION FAILED" > "$OUT"
+    cat "$ERR" > "$STATS" # Helpful to see errors in the stats pane too
 fi

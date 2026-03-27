@@ -6,9 +6,10 @@ logout="󰍃 Logout"
 suspend="󰒲 Suspend"
 reboot="󰜉 Reboot"
 shutdown=" Shutdown"
+hibernate="Hibernate"
 
 # Variable passed to rofi
-options="$lock\n$logout\n$suspend\n$reboot\n$shutdown"
+options="$lock\n$logout\n$suspend\n$reboot\n$shutdown\n$hibernate"
 
 # Launch Rofi with your Dracula config
 chosen="$(echo -e "$options" | rofi -dmenu \
@@ -31,4 +32,6 @@ case $chosen in
         systemctl reboot ;;
     $shutdown)
         systemctl poweroff ;;
+    $hibernate)
+        systemctl hibernate ;;
 esac
