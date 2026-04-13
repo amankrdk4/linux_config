@@ -47,7 +47,7 @@ nlaunch() {
     echo "Launched: $TARGET_DIR"
     
     # Open with vertical split for input/output
-    nvim -O alpha.cpp inp.txt
+    nvim  alpha.cpp inp.txt err.txt out.txt
 }
 alias nclean='() {
     local BASE_DIR="$HOME/code"
