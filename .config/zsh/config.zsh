@@ -35,7 +35,6 @@ zstyle ':completion:*' verbose true
 
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
-source <(fzf --zsh)
 source ~/.config/powerlevel10k/powerlevel10k.zsh-theme
 source ~/.config/zsh/scripts/date_rename.zsh
 # Source all scripts in ~/.config/zsh/script
@@ -44,6 +43,29 @@ if [ -d "$HOME/.config/zsh/scripts" ]; then
     source "$script"
   done
 fi
-
 export PATH=/home/alpha/.local/bin:$PATH
 export PATH=/home/alpha/.appimg:$PATH
+# --- FZF Configuration ---
+source <(fzf --zsh)
+
+# Use fdfind (Debian) or fd
+if (( $+commands[fdfind] )); then
+    # Default and ALT-C: Include hidden folders for navigation
+    export FZF_DEFAULT_COMMAND='fdfind --hidden --strip-cwd-prefix'
+    export FZF_ALT_C_COMMAND='fdfind --type d --hidden --strip-cwd-prefix'
+    
+    # CTRL-T: Files only, NO hidden files/folders
+    export FZF_CTRL_T_COMMAND='fdfind --type f --strip-cwd-prefix'
+    
+    # TAB completion: Follows default (includes hidden)
+    _fzf_compgen_path() { fdfind --hidden . "$1" }
+    _fzf_compgen_dir() { fdfind --type d --hidden . "$1" }
+elif (( $+commands[fd] )); then
+    export FZF_DEFAULT_COMMAND='fd --hidden --strip-cwd-prefix'
+    export FZF_ALT_C_COMMAND='fd --type d --hidden --strip-cwd-prefix'
+
+    export FZF_CTRL_T_COMMAND='fd --type f --strip-cwd-prefix'
+
+    _fzf_compgen_path() { fd --hidden . "$1" }
+    _fzf_compgen_dir() { fd --type d --hidden . "$1" }
+fi
