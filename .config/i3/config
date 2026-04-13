@@ -140,3 +140,9 @@ bindsym $mod+r mode "resize"
 # Window Rules
 floating_minimum_size 150 x 120
 floating_maximum_size 800 x 600
+#capslock remap
+exec_always asetxkbmap -option ctrl:nocaps
+#fast toggle script
+bindsym $mod+x exec --no-startup-id ~/.config/i3/toggle.sh
+
+
