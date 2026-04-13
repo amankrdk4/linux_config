@@ -18,13 +18,13 @@ if [ ! -f "bits/stdc++.h.gch" ]; then
         cp "$GCH_HEADER" ./bits/
         # Include -DLOCAL here as well if you use it in headers, 
         # but usually just standard flags are enough for GCH
-        g++ -std=c++17 -O2 ./bits/stdc++.h -o ./bits/stdc++.h.gch 2>/dev/null
+        g++ -std=c++20 -O2 ./bits/stdc++.h -o ./bits/stdc++.h.gch 2>/dev/null
     fi
 fi
 
 # 2. Compile with the -DLOCAL flag
 # This triggers your template's "Standard I/O" logic
-g++ -std=c++17 -O2 -DLOCAL "$FILE_FULL" -o "$FILE_NO_EXT" 2> "$ERR"
+g++ -std=c++20 -O2 -DLOCAL "$FILE_FULL" -o "$FILE_NO_EXT" 2> "$ERR"
 
 if [ $? -eq 0 ]; then
     # 3. Run with the specific 6.9s timeout
