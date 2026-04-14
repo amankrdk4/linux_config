@@ -15,7 +15,7 @@ exec --no-startup-id dunst
 exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id nm-applet
 exec --no-startup-id xss-lock -- ~/.config/i3/hibernate.sh
-exec_always --no-startup-id pkill polybar && polybar
+exec_always --no-startup-id ~/.config/i3/polybar_launch.sh
 exec_always --no-startup-id compton --config ~/.config/compton/compton.conf
 exec --no-startup-id nitrogen --restore
 exec_always --no-startup-id ~/.config/i3/i3launch.sh
