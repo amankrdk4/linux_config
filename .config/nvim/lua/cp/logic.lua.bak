@@ -1,23 +1,17 @@
--- 1. Define this first so others can see it
+-- 1. Side-by-side display utility
 local function display_side_by_side()
     local dir = vim.fn.expand("%:p:h")
-    -- FIX: We escape % with %% for Lua and use a temp .view.txt to stop double-printing
-    local view_cmd = string.format(
-        "cd '%s' && touch out.txt err.txt && " ..
-        "printf '\\n%%-40s | %%-40s\\n' '--- OUTPUT ---' '--- ERR LOG ---' > .view.txt && " ..
-        "printf '%%.s-' {1..80} >> .view.txt && echo '' >> .view.txt && " ..
-        "pr -m -t -J -w 80 out.txt err.txt >> .view.txt && " ..
-        "printf '\\n--- STATS ---\\n' >> .view.txt && cat stats.txt >> .view.txt 2>/dev/null && " ..
-        "cat .view.txt && rm .view.txt",
-        dir
-    )
+    local view_cmd = "cd " .. dir .. " && " ..
+                     "printf \"\\n%-40s | %-40s\\n\" '--- OUTPUT ---' '--- ERR LOG ---' && " ..
+                     "printf '%.s-' {1..80} && echo '' && " ..
+                     "pr -m -t -w 80 out.txt err.txt 2>/dev/null && " ..
+                     "printf \"\\n--- STATS ---\\n\" && cat stats.txt 2>/dev/null"
     vim.cmd("!" .. view_cmd)
 end
 
--- 2. Define utility for timestamps
+-- 2. Utility for timestamps
 local function get_mtime(path)
-    -- Using vim.uv (or fallback to loop) for modern Neovim stability
-    local stat = (vim.uv or vim.loop).fs_stat(path)
+    local stat = vim.loop.fs_stat(path)
     return stat and stat.mtime.sec or 0
 end
 
@@ -30,41 +24,45 @@ local function run_cpp_logic(force_input)
     local source_path = vim.fn.expand("%:p")
     local script_path = vim.fn.expand("~/.config/nvim/script/run_cpp.sh")
     
-    -- Dynamically check for PCH path
-    local env_path = os.getenv("CP_HDIR")
-    local pch = env_path or (vim.fn.expand("~") .. "/code/headers")
+    -- Fetch the zsh variable $CP_HDIR
+    local pch_dir = os.getenv("CP_HDIR") or (vim.fn.expand("~") .. "/code/headers")
 
     vim.cmd("silent! wa")
 
+    -- FIXED: Proper way to get clipboard content in Lua
     if force_input then
         local clipboard = vim.fn.getreg("+")
         local f = io.open(dir .. "/inp.txt", "w")
-        if f then f:write(clipboard) f:close() end
+        if f then 
+            f:write(clipboard) 
+            f:close() 
+        end
     end
 
     local last_src_change = get_mtime(source_path)
     local last_bin_change = get_mtime(binary_path)
 
     local run_cmd
+    -- Compile only if source is newer than binary
     if last_src_change > last_bin_change or last_bin_change == 0 then
-        -- Updated to pass the PCH directory to your script
         run_cmd = string.format("bash %s '%s' '%s' '%s' inp.txt out.txt err.txt stats.txt '%s'", 
-                  script_path, dir, file_full, file_no_ext, pch)
+                  script_path, dir, file_full, file_no_ext, pch_dir)
     else
+        -- High-speed binary execution
         run_cmd = string.format("cd '%s' && /usr/bin/time -f 'Time: %%es\\nMemory: %%MKB' -o stats.txt timeout 6.9s ./%s < inp.txt > out.txt 2> err.txt", 
                   dir, file_no_ext)
-    end
+    fi
 
     vim.cmd("!" .. run_cmd)
     display_side_by_side()
 end
 
--- 4. Set up the Autocmd
+-- 4. Set up Autocmd and Mappings
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "cpp",
     callback = function()
         local map = vim.keymap.set
-        map("n", "<F5>", function() run_cpp_logic(false) end, { buffer = true })
-        map("n", "<F6>", function() run_cpp_logic(true) end, { buffer = true })
+        map("n", "<F5>", function() run_cpp_logic(false) end, { buffer = true, desc = "CP Run" })
+        map("n", "<F6>", function() run_cpp_logic(true) end, { buffer = true, desc = "CP Run with Paste" })
     end
 })
