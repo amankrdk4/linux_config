@@ -17,7 +17,7 @@ PCH_ROOT="${PCH_BASE/#\~/$HOME}"
 LOCAL_BITS="$PCH_ROOT/bits"
 
 # --- COMPILER FLAGS ---
-FLAGS="-std=c++17 -Ofast -march=native -fno-stack-protector -pipe -DLOCAL"
+FLAGS="-std=c++23 -Ofast -march=native -fno-stack-protector -pipe -DLOCAL"
 
 # --- 1. PRE-FLIGHT ---
 cd "$TARGET_DIR" || exit 1
