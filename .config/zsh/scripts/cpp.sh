@@ -47,7 +47,7 @@ nlaunch() {
     echo "Launched: $TARGET_DIR"
     
     # Open with vertical split for input/output
-    nvim  alpha.cpp inp.txt err.txt out.txt
+    nvim -c "/autobots" -c "normal! o"  -c "normal! cc" alpha.cpp inp.txt err.txt out.txt
 }
 alias nclean='() {
     local BASE_DIR="$HOME/code"
@@ -71,3 +71,9 @@ alias nclean='() {
     done
     echo "Workspace tidied up."
 }'
+export CPP_PCH_DIR="/tmp/cppheaders"
+
+# Ensure the directory exists on startup
+if [ ! -d "$CPP_PCH_DIR" ]; then
+    mkdir -p "$CPP_PCH_DIR"
+fi

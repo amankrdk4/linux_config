@@ -50,3 +50,4 @@ source <(fzf --zsh)
 # Exclude all hidden files AND hidden folders from CTRL-T
 export FZF_CTRL_T_COMMAND='find . -path "*/.*" -prune -o -print'
 
+
