@@ -12,7 +12,7 @@ STATS_FILE="$7"
 
 # --- SAFETY FALLBACK FOR PCH_DIR ---
 # If $8 is empty, default to a safe local directory
-PCH_BASE="${8:-$HOME/code/headers}"
+PCH_BASE="${8:-/tmp/cppheaders}"
 PCH_ROOT="${PCH_BASE/#\~/$HOME}"
 LOCAL_BITS="$PCH_ROOT/bits"
 
